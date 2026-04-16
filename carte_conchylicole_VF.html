@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_c4976236f59a940b6ccf809803065d5e {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>
+    
+    
+<div style="position: fixed; 
+            bottom: 20px; left: 20px; width: 330px; 
+            background-color: white; border:2px solid #444; z-index:9999;
+            font-size:12px; padding:8px;">
+<b>Espèces (polygones)</b><br>
+<span style="background:#003366;width:14px;height:14px;display:inline-block;margin-right:4px;border:1px solid #000;"></span>
+Vernis<br>
+<span style="background:#8C510A;width:14px;height:14px;display:inline-block;margin-right:4px;border:1px solid #000;"></span>
+Murex<br>
+<span style="background:#FFD700;width:14px;height:14px;display:inline-block;margin-right:4px;border:1px solid #000;"></span>
+Haricots de mer<br>
+<span style="background:#6A3D9A;width:14px;height:14px;display:inline-block;margin-right:4px;border:1px solid #000;"></span>
+Petite prairie<br>
+<span style="background:#006400;width:14px;height:14px;display:inline-block;margin-right:4px;border:1px solid #000;"></span>
+Anemonia<br>
+<hr style="margin:4px 0;">
+<b>Statuts sanitaires (segments)</b><br>
+<span style="background:#1A9850;width:40px;height:4px;display:inline-block;margin-right:4px;"></span>
+Statut A<br>
+<span style="background:#FDAE61;width:40px;height:4px;display:inline-block;margin-right:4px;"></span>
+Statut B<br>
+<span style="background:#D73027;width:40px;height:4px;display:inline-block;margin-right:4px;"></span>
+Statut C<br>
+</div>
+    
+<div style="position: fixed;
+            top: 20px; right: 20px;
+            background-color: white; border:2px solid #444; z-index:9999;
+            font-size:12px; padding:8px; max-width:360px;">
+<b>Tableau de tonnage des gisements (t)</b>
+<table style="border-collapse:collapse; width:100%; margin-top:4px;">
+  <tr>
+    <th style="border:1px solid #666; padding:2px 4px; text-align:left;">Zone / Espèce</th>
+    <th style="border:1px solid #666; padding:2px 4px; text-align:right;">Tonnage (t)</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid #666; padding:2px 4px;">Vernis – Targha à Cabo Negro (Z1–Z4)</td>
+    <td style="border:1px solid #666; padding:2px 4px; text-align:right;">536</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #666; padding:2px 4px;">Vernis – Jnane Niche + Amtar est (Z5–Z6)</td>
+    <td style="border:1px solid #666; padding:2px 4px; text-align:right;">800</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #666; padding:2px 4px;">Petite prairie – Kaa Srass - Targha</td>
+    <td style="border:1px solid #666; padding:2px 4px; text-align:right;">20</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #666; padding:2px 4px;">Anemonia – Azla – Ras Makked</td>
+    <td style="border:1px solid #666; padding:2px 4px; text-align:right;">52</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #666; padding:2px 4px;">Anemonia – Chmaala</td>
+    <td style="border:1px solid #666; padding:2px 4px; text-align:right;">20</td>
+  </tr>
+</table>
+</div>
+    
+            <div class="folium-map" id="map_c4976236f59a940b6ccf809803065d5e" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_c4976236f59a940b6ccf809803065d5e = L.map(
+                "map_c4976236f59a940b6ccf809803065d5e",
+                {
+                    center: [35.341837037971175, -5.179554135025478],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 8,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_7eb8f92751dc054cbc4e49ecbbf396d0 = L.tileLayer(
+                "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"http://cartodb.com/attributions\"\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca href =\"http://cartodb.com/attributions\"\u003eattributions\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_c4976236f59a940b6ccf809803065d5e);
+        
+    
+            map_c4976236f59a940b6ccf809803065d5e.fitBounds(
+                [[34.040359756382436, -6.921115617860243], [36.01510934645985, -4.295190206477738]],
+                {}
+            );
+        
+    
+            var feature_group_2b760622cd116908a034a6901654c8ce = L.featureGroup(
+                {}
+            ).addTo(map_c4976236f59a940b6ccf809803065d5e);
+        
+    
+        function geo_json_602bf2c266cea3c2f9a5c7b40bd86657_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#003366", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_602bf2c266cea3c2f9a5c7b40bd86657_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_602bf2c266cea3c2f9a5c7b40bd86657 = L.geoJson(null, {
+                onEachFeature: geo_json_602bf2c266cea3c2f9a5c7b40bd86657_onEachFeature,
+            
+                style: geo_json_602bf2c266cea3c2f9a5c7b40bd86657_styler,
+        });
+
+        function geo_json_602bf2c266cea3c2f9a5c7b40bd86657_add (data) {
+            geo_json_602bf2c266cea3c2f9a5c7b40bd86657
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_602bf2c266cea3c2f9a5c7b40bd86657_add({"features": [{"geometry": {"coordinates": [[[-5.010469444444444, 35.39613055555556], [-5.001080555555555, 35.40226944444444], [-4.931108333333333, 35.33911944444445], [-4.939969444444444, 35.334900000000005], [-5.010469444444444, 35.39613055555556]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_602bf2c266cea3c2f9a5c7b40bd86657.bindTooltip(
+                `<div>
+                     Targha - Chmaâla – Vernis
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_46e642b18fb717d4f2a6f187250f26db_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#003366", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_46e642b18fb717d4f2a6f187250f26db_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_46e642b18fb717d4f2a6f187250f26db = L.geoJson(null, {
+                onEachFeature: geo_json_46e642b18fb717d4f2a6f187250f26db_onEachFeature,
+            
+                style: geo_json_46e642b18fb717d4f2a6f187250f26db_styler,
+        });
+
+        function geo_json_46e642b18fb717d4f2a6f187250f26db_add (data) {
+            geo_json_46e642b18fb717d4f2a6f187250f26db
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_46e642b18fb717d4f2a6f187250f26db_add({"features": [{"geometry": {"coordinates": [[[-5.0912, 35.4519], [-5.079319444444444, 35.45788055555556], [-5.050011111111111, 35.41481944444444], [-5.062969444444445, 35.40871111111111], [-5.0912, 35.4519]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_46e642b18fb717d4f2a6f187250f26db.bindTooltip(
+                `<div>
+                     Oued Laou - Kaâ Srass – Vernis
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_b085a3355cb0c0f78993a126cbe7572f_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#003366", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_b085a3355cb0c0f78993a126cbe7572f_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_b085a3355cb0c0f78993a126cbe7572f = L.geoJson(null, {
+                onEachFeature: geo_json_b085a3355cb0c0f78993a126cbe7572f_onEachFeature,
+            
+                style: geo_json_b085a3355cb0c0f78993a126cbe7572f_styler,
+        });
+
+        function geo_json_b085a3355cb0c0f78993a126cbe7572f_add (data) {
+            geo_json_b085a3355cb0c0f78993a126cbe7572f
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_b085a3355cb0c0f78993a126cbe7572f_add({"features": [{"geometry": {"coordinates": [[[-5.335623233964952, 35.79925047461626], [-5.259612122853866, 35.68773103017173], [-5.27613055555554, 35.691538888889], [-5.323215654923786, 35.69448800957565], [-5.351135099368321, 35.80423800957567], [-5.335623233964952, 35.79925047461626]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_b085a3355cb0c0f78993a126cbe7572f.bindTooltip(
+                `<div>
+                     Oued Negro - M'Diq – Vernis
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_2b3a370801c25998d7b5c64e7cd56839_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#003366", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_2b3a370801c25998d7b5c64e7cd56839_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_2b3a370801c25998d7b5c64e7cd56839 = L.geoJson(null, {
+                onEachFeature: geo_json_2b3a370801c25998d7b5c64e7cd56839_onEachFeature,
+            
+                style: geo_json_2b3a370801c25998d7b5c64e7cd56839_styler,
+        });
+
+        function geo_json_2b3a370801c25998d7b5c64e7cd56839_add (data) {
+            geo_json_2b3a370801c25998d7b5c64e7cd56839
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_2b3a370801c25998d7b5c64e7cd56839_add({"features": [{"geometry": {"coordinates": [[[-5.281567660042112, 35.66703888888889], [-5.2678982155976675, 35.66813055555555], [-5.262109326708779, 35.64285], [-5.275678771153223, 35.63931111111111], [-5.281567660042112, 35.66703888888889]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_2b3a370801c25998d7b5c64e7cd56839.bindTooltip(
+                `<div>
+                     Cabo Negro - Martil – Vernis
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_db48610b9771d7962dab60e06f62520c_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#003366", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_db48610b9771d7962dab60e06f62520c_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_db48610b9771d7962dab60e06f62520c = L.geoJson(null, {
+                onEachFeature: geo_json_db48610b9771d7962dab60e06f62520c_onEachFeature,
+            
+                style: geo_json_db48610b9771d7962dab60e06f62520c_styler,
+        });
+
+        function geo_json_db48610b9771d7962dab60e06f62520c_add (data) {
+            geo_json_db48610b9771d7962dab60e06f62520c
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_db48610b9771d7962dab60e06f62520c_add({"features": [{"geometry": {"coordinates": [[[-4.8621888888888884, 35.29671111111111], [-4.8534, 35.30216111111111], [-4.793580555555556, 35.25956111111111], [-4.79955, 35.253030555555554], [-4.8621888888888884, 35.29671111111111]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_db48610b9771d7962dab60e06f62520c.bindTooltip(
+                `<div>
+                     Jnane Niche - Amtar ouest – Vernis
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_cb84c184623921ed4e3fccd579358a33_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#003366", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_cb84c184623921ed4e3fccd579358a33_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_cb84c184623921ed4e3fccd579358a33 = L.geoJson(null, {
+                onEachFeature: geo_json_cb84c184623921ed4e3fccd579358a33_onEachFeature,
+            
+                style: geo_json_cb84c184623921ed4e3fccd579358a33_styler,
+        });
+
+        function geo_json_cb84c184623921ed4e3fccd579358a33_add (data) {
+            geo_json_cb84c184623921ed4e3fccd579358a33
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_cb84c184623921ed4e3fccd579358a33_add({"features": [{"geometry": {"coordinates": [[[-4.766030555555556, 35.23410833333333], [-4.7604194444444445, 35.24183055555556], [-4.679180555555556, 35.21425], [-4.683438888888889, 35.205961111111115], [-4.766030555555556, 35.23410833333333]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_cb84c184623921ed4e3fccd579358a33.bindTooltip(
+                `<div>
+                     Amtar est - Jebha – Vernis
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_4b0a8ed93045ae0d59daa81604413525_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#FFD700", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_4b0a8ed93045ae0d59daa81604413525_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_4b0a8ed93045ae0d59daa81604413525 = L.geoJson(null, {
+                onEachFeature: geo_json_4b0a8ed93045ae0d59daa81604413525_onEachFeature,
+            
+                style: geo_json_4b0a8ed93045ae0d59daa81604413525_styler,
+        });
+
+        function geo_json_4b0a8ed93045ae0d59daa81604413525_add (data) {
+            geo_json_4b0a8ed93045ae0d59daa81604413525
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_4b0a8ed93045ae0d59daa81604413525_add({"features": [{"geometry": {"coordinates": [[[-6.694166666666667, 34.22027777777778], [-6.701419444444444, 34.20492222222222], [-6.695225000000001, 34.22061666666667], [-6.694166666666667, 34.22027777777778]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_4b0a8ed93045ae0d59daa81604413525.bindTooltip(
+                `<div>
+                     Sidi Boughaba – Haricots de mer
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_918947837cb64edbde617e63ef39f381_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#8C510A", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_918947837cb64edbde617e63ef39f381_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_918947837cb64edbde617e63ef39f381 = L.geoJson(null, {
+                onEachFeature: geo_json_918947837cb64edbde617e63ef39f381_onEachFeature,
+            
+                style: geo_json_918947837cb64edbde617e63ef39f381_styler,
+        });
+
+        function geo_json_918947837cb64edbde617e63ef39f381_add (data) {
+            geo_json_918947837cb64edbde617e63ef39f381
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_918947837cb64edbde617e63ef39f381_add({"features": [{"geometry": {"coordinates": [[[-5.326222718983528, 35.81755189164061], [-5.326222718983528, 35.850546880620065], [-5.286222718983508, 35.850546880620065], [-5.285907066204315, 35.77199022515247], [-5.326222718983528, 35.81755189164061]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_918947837cb64edbde617e63ef39f381.bindTooltip(
+                `<div>
+                     Fnideq – offshore – Murex
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_16439f874b0a34981999cee8f90068a5_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#8C510A", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_16439f874b0a34981999cee8f90068a5_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_16439f874b0a34981999cee8f90068a5 = L.geoJson(null, {
+                onEachFeature: geo_json_16439f874b0a34981999cee8f90068a5_onEachFeature,
+            
+                style: geo_json_16439f874b0a34981999cee8f90068a5_styler,
+        });
+
+        function geo_json_16439f874b0a34981999cee8f90068a5_add (data) {
+            geo_json_16439f874b0a34981999cee8f90068a5
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_16439f874b0a34981999cee8f90068a5_add({"features": [{"geometry": {"coordinates": [[[-5.220331450165812, 35.60125503631872], [-5.259755791120025, 35.67171848535929], [-5.208835325595256, 35.692181850009376], [-5.169812165099696, 35.615563205621584], [-5.220331450165812, 35.60125503631872]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_16439f874b0a34981999cee8f90068a5.bindTooltip(
+                `<div>
+                     Martil – offshore – Murex
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_1ea20f32c3d4ecb72a522d8a266c4267_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#8C510A", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_1ea20f32c3d4ecb72a522d8a266c4267_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_1ea20f32c3d4ecb72a522d8a266c4267 = L.geoJson(null, {
+                onEachFeature: geo_json_1ea20f32c3d4ecb72a522d8a266c4267_onEachFeature,
+            
+                style: geo_json_1ea20f32c3d4ecb72a522d8a266c4267_styler,
+        });
+
+        function geo_json_1ea20f32c3d4ecb72a522d8a266c4267_add (data) {
+            geo_json_1ea20f32c3d4ecb72a522d8a266c4267
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_1ea20f32c3d4ecb72a522d8a266c4267_add({"features": [{"geometry": {"coordinates": [[[-4.731821071202091, 35.25405444464553], [-4.71611150823054, 35.31970281537241], [-4.67118520205787, 35.31536491156953], [-4.514017324092947, 35.25546522981438], [-4.531755989831879, 35.19770880802753], [-4.731821071202091, 35.25405444464553]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_1ea20f32c3d4ecb72a522d8a266c4267.bindTooltip(
+                `<div>
+                     Jebha – offshore – Murex
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_747cedbdecdc9fba9dc49d07ad8f3c24_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#6A3D9A", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_747cedbdecdc9fba9dc49d07ad8f3c24_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_747cedbdecdc9fba9dc49d07ad8f3c24 = L.geoJson(null, {
+                onEachFeature: geo_json_747cedbdecdc9fba9dc49d07ad8f3c24_onEachFeature,
+            
+                style: geo_json_747cedbdecdc9fba9dc49d07ad8f3c24_styler,
+        });
+
+        function geo_json_747cedbdecdc9fba9dc49d07ad8f3c24_add (data) {
+            geo_json_747cedbdecdc9fba9dc49d07ad8f3c24
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_747cedbdecdc9fba9dc49d07ad8f3c24_add({"features": [{"geometry": {"coordinates": [[[-5.070962843285997, 35.42456182437644], [-5.078577118504597, 35.44178912205865], [-5.0763721168438565, 35.44178912205865], [-5.068012311638711, 35.42513289501784], [-5.070962843285997, 35.42456182437644]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_747cedbdecdc9fba9dc49d07ad8f3c24.bindTooltip(
+                `<div>
+                     Kaa Srass – Targha – Petite prairie
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_9d2abced58938f508fe787245959d3fb_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#006400", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_9d2abced58938f508fe787245959d3fb_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_9d2abced58938f508fe787245959d3fb = L.geoJson(null, {
+                onEachFeature: geo_json_9d2abced58938f508fe787245959d3fb_onEachFeature,
+            
+                style: geo_json_9d2abced58938f508fe787245959d3fb_styler,
+        });
+
+        function geo_json_9d2abced58938f508fe787245959d3fb_add (data) {
+            geo_json_9d2abced58938f508fe787245959d3fb
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_9d2abced58938f508fe787245959d3fb_add({"features": [{"geometry": {"coordinates": [[[-5.242315995367562, 35.55736780779989], [-5.248400018626057, 35.5754292772657], [-5.243301007725734, 35.58351712859712], [-5.2324506655390906, 35.584278556119045], [-5.225597817842356, 35.579138920346395], [-5.221029252711162, 35.579138920346395], [-5.2208388958306955, 35.576093210259046], [-5.217602828862766, 35.57152464512768], [-5.215699260058045, 35.565623581833336], [-5.22483639032049, 35.55667680845147], [-5.242315995367562, 35.55736780779989]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_9d2abced58938f508fe787245959d3fb.bindTooltip(
+                `<div>
+                     Azla – Ras Makked – Anemonia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_ec22dca5aba3b875e4620764694b8c9b_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#006400", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_ec22dca5aba3b875e4620764694b8c9b_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_ec22dca5aba3b875e4620764694b8c9b = L.geoJson(null, {
+                onEachFeature: geo_json_ec22dca5aba3b875e4620764694b8c9b_onEachFeature,
+            
+                style: geo_json_ec22dca5aba3b875e4620764694b8c9b_styler,
+        });
+
+        function geo_json_ec22dca5aba3b875e4620764694b8c9b_add (data) {
+            geo_json_ec22dca5aba3b875e4620764694b8c9b
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_ec22dca5aba3b875e4620764694b8c9b_add({"features": [{"geometry": {"coordinates": [[[-4.981504737871603, 35.37253446483726], [-4.982408933053762, 35.37260584866732], [-4.9830989767454525, 35.373510043849535], [-4.9835748689466755, 35.37603227251577], [-4.981100229500612, 35.3759846832956], [-4.980386391198806, 35.37586571024531], [-4.978958714595365, 35.375556380314606], [-4.9783162601237905, 35.37503289889338], [-4.978221081683557, 35.37431906059163], [-4.978292465513675, 35.373414865409245], [-4.979213557918172, 35.37293746382505], [-4.980600542689388, 35.3721299564661], [-4.981504737871603, 35.37253446483726]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_ec22dca5aba3b875e4620764694b8c9b.bindTooltip(
+                `<div>
+                     Chmaala – Anemonia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+        function geo_json_2a0be55005a973c1ffa1317e1e08b22d_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "#333333", "fillColor": "#006400", "fillOpacity": 0.75, "weight": 0.8};
+            }
+        }
+
+        function geo_json_2a0be55005a973c1ffa1317e1e08b22d_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_2a0be55005a973c1ffa1317e1e08b22d = L.geoJson(null, {
+                onEachFeature: geo_json_2a0be55005a973c1ffa1317e1e08b22d_onEachFeature,
+            
+                style: geo_json_2a0be55005a973c1ffa1317e1e08b22d_styler,
+        });
+
+        function geo_json_2a0be55005a973c1ffa1317e1e08b22d_add (data) {
+            geo_json_2a0be55005a973c1ffa1317e1e08b22d
+                .addData(data)
+                .addTo(feature_group_2b760622cd116908a034a6901654c8ce);
+        }
+            geo_json_2a0be55005a973c1ffa1317e1e08b22d_add({"features": [{"geometry": {"coordinates": [[[-4.653922670711381, 35.21453548653017], [-4.6555502220393805, 35.217447946801315], [-4.654845901581723, 35.219114045397475], [-4.652666315300394, 35.21913260519352], [-4.6503687077531595, 35.21943384495677], [-4.649982283285794, 35.2183045527633], [-4.648815395608551, 35.21692113413462], [-4.649325552048197, 35.21533498542817], [-4.650781782183799, 35.21493523597917], [-4.652104762503029, 35.214088623753355], [-4.653922670711381, 35.21453548653017]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_2a0be55005a973c1ffa1317e1e08b22d.bindTooltip(
+                `<div>
+                     Jebha – benthique – Anemonia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var feature_group_02d73351a064ae80ebca9e198fb63529 = L.featureGroup(
+                {}
+            ).addTo(map_c4976236f59a940b6ccf809803065d5e);
+        
+    
+            var poly_line_356e01ec6648ea5cf1272a3eaaab27f4 = L.polyline(
+                [[35.40536755439027, -4.999652878952056], [35.342217554390274, -4.929680656729834]],
+                {"bubblingMouseEvents": true, "color": "#1A9850", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#1A9850", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_b1d6b9aeaca8ac8b28b1118021a4a2e9 = L.popup({"maxWidth": 250});
+
+        
+            var html_9da5d14ede783ae61184341a293ecd7d = $(`<div id="html_9da5d14ede783ae61184341a293ecd7d" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Targha - Chmaâla<br><b>Statut sanitaire :</b> A</div>`)[0];
+            popup_b1d6b9aeaca8ac8b28b1118021a4a2e9.setContent(html_9da5d14ede783ae61184341a293ecd7d);
+        
+
+        poly_line_356e01ec6648ea5cf1272a3eaaab27f4.bindPopup(popup_b1d6b9aeaca8ac8b28b1118021a4a2e9)
+        ;
+
+        
+    
+    
+            var poly_line_16be70ed7a7db3d3968f4f2f344fbf8d = L.polyline(
+                [[35.4580726169804, -5.074019273637632], [35.41501150586928, -5.0447109403043]],
+                {"bubblingMouseEvents": true, "color": "#FDAE61", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FDAE61", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_71fe2c8505dca59e1913c57b3fc1d099 = L.popup({"maxWidth": 250});
+
+        
+            var html_5e82d4415092aa68dd9df0483a98ee72 = $(`<div id="html_5e82d4415092aa68dd9df0483a98ee72" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Oued Laou - Kaâ Srass<br><b>Statut sanitaire :</b> B</div>`)[0];
+            popup_71fe2c8505dca59e1913c57b3fc1d099.setContent(html_5e82d4415092aa68dd9df0483a98ee72);
+        
+
+        poly_line_16be70ed7a7db3d3968f4f2f344fbf8d.bindPopup(popup_71fe2c8505dca59e1913c57b3fc1d099)
+        ;
+
+        
+    
+    
+            var poly_line_581fcfb6768064001f7c47e6008ddecb = L.polyline(
+                [[35.702640392247325, -5.253318327716915], [35.81415983669177, -5.329329438828026]],
+                {"bubblingMouseEvents": true, "color": "#FDAE61", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FDAE61", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_8949b1d241fd9c65fc3f77df90abd4d5 = L.popup({"maxWidth": 250});
+
+        
+            var html_6f33d8feab665dbda54f4881514a9553 = $(`<div id="html_6f33d8feab665dbda54f4881514a9553" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Oued Negro - M'Diq<br><b>Statut sanitaire :</b> B</div>`)[0];
+            popup_8949b1d241fd9c65fc3f77df90abd4d5.setContent(html_6f33d8feab665dbda54f4881514a9553);
+        
+
+        poly_line_581fcfb6768064001f7c47e6008ddecb.bindPopup(popup_8949b1d241fd9c65fc3f77df90abd4d5)
+        ;
+
+        
+    
+    
+            var poly_line_f7cd327f203ddd3e7e55205d812cfff0 = L.polyline(
+                [[35.640505652252266, -5.257594867508913], [35.66823343003004, -5.263483756397802]],
+                {"bubblingMouseEvents": true, "color": "#FDAE61", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FDAE61", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_afa35f0dbcec780aed8b821c05bda5ca = L.popup({"maxWidth": 250});
+
+        
+            var html_b42166c2a4669740d08f0d7bbdce933a = $(`<div id="html_b42166c2a4669740d08f0d7bbdce933a" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Cabo Negro - Martil<br><b>Statut sanitaire :</b> B</div>`)[0];
+            popup_afa35f0dbcec780aed8b821c05bda5ca.setContent(html_b42166c2a4669740d08f0d7bbdce933a);
+        
+
+        poly_line_f7cd327f203ddd3e7e55205d812cfff0.bindPopup(popup_afa35f0dbcec780aed8b821c05bda5ca)
+        ;
+
+        
+    
+    
+            var poly_line_d34a09b0fefd3744e2d7fd23e1290f93 = L.polyline(
+                [[35.26136347971421, -4.78984179909621], [35.305044035269766, -4.852480687985098]],
+                {"bubblingMouseEvents": true, "color": "#1A9850", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#1A9850", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_00d60fae60b691ca080268ba8630ba26 = L.popup({"maxWidth": 250});
+
+        
+            var html_a006959e47db2cb830dcedeb0dc51adc = $(`<div id="html_a006959e47db2cb830dcedeb0dc51adc" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Jnane Niche - Amtar ouest<br><b>Statut sanitaire :</b> A</div>`)[0];
+            popup_00d60fae60b691ca080268ba8630ba26.setContent(html_a006959e47db2cb830dcedeb0dc51adc);
+        
+
+        poly_line_d34a09b0fefd3744e2d7fd23e1290f93.bindPopup(popup_00d60fae60b691ca080268ba8630ba26)
+        ;
+
+        
+    
+    
+            var poly_line_0813ea13a48d517097ad23233cd85a23 = L.polyline(
+                [[35.21562653343304, -4.677157111833496], [35.243773755655255, -4.759748778500162]],
+                {"bubblingMouseEvents": true, "color": "#1A9850", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#1A9850", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_f75165b3f10cc3196eaa3ee0f394ee51 = L.popup({"maxWidth": 250});
+
+        
+            var html_bd0d8ca7bfc985bb20c6a0ecb7ae27b0 = $(`<div id="html_bd0d8ca7bfc985bb20c6a0ecb7ae27b0" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Amtar est - Jebha<br><b>Statut sanitaire :</b> A</div>`)[0];
+            popup_f75165b3f10cc3196eaa3ee0f394ee51.setContent(html_bd0d8ca7bfc985bb20c6a0ecb7ae27b0);
+        
+
+        poly_line_0813ea13a48d517097ad23233cd85a23.bindPopup(popup_f75165b3f10cc3196eaa3ee0f394ee51)
+        ;
+
+        
+    
+    
+            var poly_line_4ab51b1980c4751bc21734c0408cadeb = L.polyline(
+                [[34.22027777777778, -6.695035722467257], [34.20492222222222, -6.702288500245035]],
+                {"bubblingMouseEvents": true, "color": "#D73027", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#D73027", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_02d73351a064ae80ebca9e198fb63529);
+        
+    
+        var popup_193073c98681c5879484b370aa0558f2 = L.popup({"maxWidth": 250});
+
+        
+            var html_4cf991fcd15b63075d2ae32ff5a9ff76 = $(`<div id="html_4cf991fcd15b63075d2ae32ff5a9ff76" style="width: 100.0%; height: 100.0%;"><b>Zone :</b> Sidi Boughaba<br><b>Statut sanitaire :</b> C</div>`)[0];
+            popup_193073c98681c5879484b370aa0558f2.setContent(html_4cf991fcd15b63075d2ae32ff5a9ff76);
+        
+
+        poly_line_4ab51b1980c4751bc21734c0408cadeb.bindPopup(popup_193073c98681c5879484b370aa0558f2)
+        ;
+
+        
+    
+    
+            var layer_control_10805f48ecad73c7c52d8ce12065d122 = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_7eb8f92751dc054cbc4e49ecbbf396d0,
+                },
+                overlays :  {
+                    "Esp\u00e8ces exploit\u00e9es (polygones)" : feature_group_2b760622cd116908a034a6901654c8ce,
+                    "Statuts sanitaires (segments parall\u00e8les)" : feature_group_02d73351a064ae80ebca9e198fb63529,
+                },
+            };
+            L.control.layers(
+                layer_control_10805f48ecad73c7c52d8ce12065d122.base_layers,
+                layer_control_10805f48ecad73c7c52d8ce12065d122.overlays,
+                {"autoZIndex": true, "collapsed": false, "position": "topright"}
+            ).addTo(map_c4976236f59a940b6ccf809803065d5e);
+        
+</script>
+</html>
